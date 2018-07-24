@@ -17,68 +17,20 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      array: Array(9).fill(null),
-      turn: true
-    }
-  }
-  turnCheck(i)  {
-      const {array, turn} = this.state;
-      let element = [...array];
-      if(element[i] !== null) {
-        return;
-      }
-      if(winnerCheck(array)) {
-        console.log(winnerCheck(array))
-        return;
-      }
-      else if(turn) {
-          element[i] = "x";
-      }
-      else if(!turn) {
-          element[i] = "o";
-      }
-
-      this.setState({
-          array: element,
-          turn: !turn
-      })
-  }
 
   renderSquare(i) {
     return (
       <Square
-        squareNumber = {this.state.array[i]}
-        clickHandler = {() => this.turnCheck(i)}
+        squareNumber = {this.props.squares[i]}
+        clickHandler = {() => this.props.turnCheck(i)}
       />
     )
   }
 
   render() {
-    const {array, turn} = this.state;
-    let end = "No winner yet";
-    const winner = winnerCheck(array)
-    if(winner === "no one") {
-      end = `The winner is ${winner}`
 
-    }
-    else if(winner) {
-      end = `The winner is ${winner}`
-
-    }
-    let status;
-    if (winner || winner === "no one") {
-     status = 'Winner: ' + winner;
-    } else {
-     status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-    }
     return (
       <div>
-        <div className="status">{status}</div>
-
-
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -98,13 +50,79 @@ class Board extends React.Component {
     );
   }
 }
+class Player extends React.Component {
+  static FIRST_PLAYER = 'x';
+  static SECOND_PLAYER = "o"
+}
 
 class Game extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      squares: Array(9).fill(null),
+      turn: true,
+      winner: null
+    }
+  }
+
+  playerDetect() {
+
+          if(this.state.turn) {
+            return Player.FIRST_PLAYER;
+          }
+          else {
+            return Player.SECOND_PLAYER;
+          }
+
+        }
+  turnCheck(i)  {
+
+      const {squares, turn, winner} = this.state;
+      let element = [...squares];
+      console.log(winner)
+      if(element[i] !== null || winner) {
+        return;
+      }
+
+      element[i] = this.playerDetect();
+
+      this.setState({
+          squares: element,
+          turn: !turn
+      })
+      this.winnerDetect(element);
+  }
+  winnerDetect(squares) {
+    const {swinner} = this.state;
+
+    const currentWinner = winnerCheck(squares)
+
+    if(currentWinner) {
+      this.setState({
+          winner: currentWinner
+      })
+    }
+
+  }
+
   render() {
+
+    const {winner} = this.state;
+    let status;
+    if (winner) {
+     status = 'Winner: ' + winner;
+    } else {
+     status = `Next Player: ${this.playerDetect()}`;
+    }
+
     return (
+
       <div className="game">
+      <div className="status">{status}</div>
         <div className="game-board">
-          <Board />
+          <Board
+            squares={this.state.squares}
+            turnCheck={(i) => this.turnCheck(i)}/>
         </div>
         <div className="game-info">
           <div>{/* status */}</div>
@@ -122,7 +140,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-function winnerCheck(array) {
+function winnerCheck(squares) {
   const possibility = [
     [0, 1, 2],
     [3, 4, 5],
@@ -135,11 +153,11 @@ function winnerCheck(array) {
   ];
   for (let i = 0; i < possibility.length; i++) {
     const [x,y,z] = possibility[i];
-    if (array[x] && array[x] === array[y] && array[y] === array[z]) {
-      return array[x];
+    if (squares[x] && squares[x] === squares[y] && squares[y] === squares[z]) {
+      return squares[x];
     }
   }
-  if(!array.includes(null)) {
+  if(!squares.includes(null)) {
     return "no one";
   }
   return null;
