@@ -56,10 +56,11 @@ class Player extends React.Component {
 }
 
 class Game extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      squares: Array(9).fill(null),
+      histories: [Array(9).fill(null)],
+      currentStep: 0,
       turn: true,
       winner: null
     }
@@ -77,23 +78,28 @@ class Game extends React.Component {
         }
   turnCheck(i)  {
 
-      const {squares, turn, winner} = this.state;
-      let element = [...squares];
-      console.log(winner)
+      const { turn, winner, currentStep} = this.state;
+
+
+      const histories = this.state.histories.slice(0, currentStep + 1);
+      const current = histories[histories.length - 1];
+      const element = current.slice();
       if(element[i] !== null || winner) {
         return;
       }
-
+      console.log(histories)
       element[i] = this.playerDetect();
 
+      histories.push(element)
       this.setState({
-          squares: element,
-          turn: !turn
+          histories,
+          turn: !turn,
+          currentStep: currentStep + 1
       })
       this.winnerDetect(element);
   }
   winnerDetect(squares) {
-    const {swinner} = this.state;
+    const {winner} = this.state;
 
     const currentWinner = winnerCheck(squares)
 
@@ -107,26 +113,37 @@ class Game extends React.Component {
 
   render() {
 
-    const {winner} = this.state;
+    const {histories, winner, currentStep} = this.state;
     let status;
     if (winner) {
      status = 'Winner: ' + winner;
     } else {
      status = `Next Player: ${this.playerDetect()}`;
     }
-
+    const moves = histories.map((step, move) => {
+     const menu = move ? `Go to ${move} move` : 'start from the beginning';
+     return (
+       <li key={move}>
+       <button
+         onClick={() => {
+           this.setState({currentStep: move})
+         }
+       }>{menu}</button>
+       </li>
+     );
+   });
     return (
 
       <div className="game">
-      <div className="status">{status}</div>
         <div className="game-board">
           <Board
-            squares={this.state.squares}
+            squares={histories[currentStep]}
             turnCheck={(i) => this.turnCheck(i)}/>
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
+          <div>{status}</div>
+          <div>{moves}</div>
+
         </div>
       </div>
     );
