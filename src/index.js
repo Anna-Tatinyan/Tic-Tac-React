@@ -8,7 +8,7 @@ class Square extends React.Component {
   render() {
     return (
         <button className="square" onClick = {() =>
-          this.props.ClickHandler()}>
+          this.props.clickHandler()}>
         {this.props.squareNumber}
 
         </button>
@@ -21,27 +21,29 @@ class Board extends React.Component {
     super();
     this.state = {
       array: Array(9).fill(null),
-      bool: true
+      turn: true
     }
   }
-  ClickFunc(i)  {
-      const {array, bool} = this.state;
+  turnCheck(i)  {
+      const {array, turn} = this.state;
       let element = [...array];
-
-      if(Winner(array)) {
-        console.log(Winner(array))
+      if(element[i] !== null) {
         return;
       }
-      else if(element[i] == null && bool) {
+      if(winnerCheck(array)) {
+        console.log(winnerCheck(array))
+        return;
+      }
+      else if(turn) {
           element[i] = "x";
       }
-      else if(element[i] == null && !bool) {
+      else if(!turn) {
           element[i] = "o";
       }
 
       this.setState({
           array: element,
-          bool: !bool
+          turn: !turn
       })
   }
 
@@ -49,25 +51,29 @@ class Board extends React.Component {
     return (
       <Square
         squareNumber = {this.state.array[i]}
-        ClickHandler = {() => this.ClickFunc(i)}
+        clickHandler = {() => this.turnCheck(i)}
       />
     )
   }
 
   render() {
-    const {array, bool} = this.state;
+    const {array, turn} = this.state;
     let end = "No winner yet";
-    const winner = Winner(array)
+    const winner = winnerCheck(array)
     if(winner === "no one") {
       end = `The winner is ${winner}`
-      alert(end)
+
     }
     else if(winner) {
       end = `The winner is ${winner}`
-      alert(end)
-    }
 
-    const status = 'Next player: ' + (bool ? 'x' : 'O');
+    }
+    let status;
+    if (winner || winner === "no one") {
+     status = 'Winner: ' + winner;
+    } else {
+     status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    }
     return (
       <div>
         <div className="status">{status}</div>
@@ -116,7 +122,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-function Winner(array) {
+function winnerCheck(array) {
   const possibility = [
     [0, 1, 2],
     [3, 4, 5],
