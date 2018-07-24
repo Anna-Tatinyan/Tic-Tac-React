@@ -5,24 +5,13 @@ import './index.css';
 
 class Square extends React.Component {
 
-  constructor(props) {
-    debugger;
-    super();
-
-    this.state = {
-      squareText: props.squareNumber
-    }
-  }
   render() {
     return (
-      <button className="square" onClick = {() => {
-        const check = PlayerCheck(this.props.squareNumber);
-          this.setState({squareText: check})
-        }
-      }>
-      {this.state.squareText}
-        {/* TODO */}
-      </button>
+        <button className="square" onClick = {() =>
+          this.props.ClickHandler()}>
+        {this.props.squareNumber}
+
+        </button>
     );
   }
 }
@@ -31,29 +20,59 @@ class Board extends React.Component {
   constructor() {
     super();
     this.state = {
-      char: 5
+      array: Array(9).fill(null),
+      bool: true
     }
   }
-  handleClick() {
-    this.setState({
-      char: !this.state.char,
+  ClickFunc(i)  {
+      const {array, bool} = this.state;
+      let element = [...array];
 
-    });
- }
+      if(Winner(array)) {
+        console.log(Winner(array))
+        return;
+      }
+      else if(element[i] == null && bool) {
+          element[i] = "x";
+      }
+      else if(element[i] == null && !bool) {
+          element[i] = "o";
+      }
+
+      this.setState({
+          array: element,
+          bool: !bool
+      })
+  }
 
   renderSquare(i) {
-    onClick={() => this.handleClick()}
-    return <Square squareNumber = {i}/>;
-
-
+    return (
+      <Square
+        squareNumber = {this.state.array[i]}
+        ClickHandler = {() => this.ClickFunc(i)}
+      />
+    )
   }
 
   render() {
-    const status = 'Next player: ' + (this.state.char ? 'y' : 'O');
+    const {array, bool} = this.state;
+    let end = "No winner yet";
+    const winner = Winner(array)
+    if(winner === "no one") {
+      end = `The winner is ${winner}`
+      alert(end)
+    }
+    else if(winner) {
+      end = `The winner is ${winner}`
+      alert(end)
+    }
 
+    const status = 'Next player: ' + (bool ? 'x' : 'O');
     return (
       <div>
         <div className="status">{status}</div>
+
+
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -110,18 +129,12 @@ function Winner(array) {
   ];
   for (let i = 0; i < possibility.length; i++) {
     const [x,y,z] = possibility[i];
-    if (array[x] && array[x] === array[y] && array[x] === array[x]) {
+    if (array[x] && array[x] === array[y] && array[y] === array[z]) {
       return array[x];
     }
   }
+  if(!array.includes(null)) {
+    return "no one";
+  }
   return null;
-}
-
-function PlayerCheck(num) {
-  if(num%2 === 0) {
-    return "x";
-  }
-  else {
-    return "o";
-  }
 }
