@@ -82,22 +82,23 @@ class Game extends React.Component {
 
 
       const histories = this.state.histories.slice(0, currentStep + 1);
-      const current = histories[histories.length - 1];
-      const element = current.slice();
-      if(element[i] !== null || winner) {
+      const square = histories[histories.length - 1];
+      const squareCopy = square.slice();
+      if(squareCopy[i] !== null || winner) {
         return;
       }
       console.log(histories)
-      element[i] = this.playerDetect();
+      squareCopy[i] = this.playerDetect();
 
-      histories.push(element)
+      histories.push(squareCopy)
       this.setState({
           histories,
           turn: !turn,
           currentStep: currentStep + 1
       })
-      this.winnerDetect(element);
+      this.winnerDetect(squareCopy);
   }
+
   winnerDetect(squares) {
     const {winner} = this.state;
 
@@ -124,14 +125,15 @@ class Game extends React.Component {
      const menu = move ? `Go to ${move} move` : 'start from the beginning';
      return (
        <li key={move}>
-       <button
-         onClick={() => {
-           this.setState({currentStep: move})
-         }
-       }>{menu}</button>
+         <button
+           onClick={() => {
+             this.setState({currentStep: move})
+             }
+           }
+           >{menu}</button>
        </li>
      );
-   });
+    });
     return (
 
       <div className="game">
