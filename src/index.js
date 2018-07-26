@@ -61,14 +61,14 @@ class Game extends React.Component {
     this.state = {
       histories: [Array(9).fill(null)],
       currentStep: 0,
-      turn: true,
+      FisrPlayerIs: true,
       winner: null
     }
   }
 
   playerDetect() {
 
-          if(this.state.turn) {
+          if(this.state.FisrPlayerIs) {
             return Player.FIRST_PLAYER;
           }
           else {
@@ -78,7 +78,7 @@ class Game extends React.Component {
         }
   turnCheck(i)  {
 
-      const { turn, winner, currentStep} = this.state;
+      const { FisrPlayerIs, winner, currentStep} = this.state;
 
 
       const histories = this.state.histories.slice(0, currentStep + 1);
@@ -87,13 +87,12 @@ class Game extends React.Component {
       if(squareCopy[i] !== null || winner) {
         return;
       }
-      console.log(histories)
       squareCopy[i] = this.playerDetect();
 
       histories.push(squareCopy)
       this.setState({
           histories,
-          turn: !turn,
+          FisrPlayerIs: !FisrPlayerIs,
           currentStep: currentStep + 1
       })
       this.winnerDetect(squareCopy);
