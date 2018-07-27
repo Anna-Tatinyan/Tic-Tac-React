@@ -3,6 +3,8 @@ import {connect} from "react-redux";
 import Board from "../components/board";
 import '../index.css';
 import {moveStep, jumpTo} from "../actions/action.js"
+import Player from "../constants/player"
+
 
 class Game extends React.Component {
 
@@ -16,7 +18,7 @@ class Game extends React.Component {
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
-      status = `Next Player: ${firstPlayerIs ? 'X' : 'O'}`;
+      status = `Next Player: ${firstPlayerIs ? Player.FIRST_PLAYER : Player.SECOND_PLAYER}`;
     }
     const moves = histories.map((step, move) => {
       const menu = move ? `Go to the ${move} move` : 'start from the beginning';

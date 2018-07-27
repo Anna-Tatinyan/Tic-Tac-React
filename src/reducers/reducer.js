@@ -1,9 +1,4 @@
-
-class Player {
-  static FIRST_PLAYER = 'x';
-  static SECOND_PLAYER = "o"
-}
-
+import Player from "../constants/player"
 const initialState = {
 
     histories: [Array(9).fill(null)],
@@ -24,7 +19,7 @@ export default function reducer(state = initialState, action) {
         const square = histories[currentStep].slice();
         if(square[action.squareNumber] !== null || winner) return state;
 
-        square[action.squareNumber] = playerDetect(firstPlayerIs);
+        square[action.squareNumber] = detectPlayer(firstPlayerIs);
 
         histories.push(square)
         return {
@@ -32,7 +27,7 @@ export default function reducer(state = initialState, action) {
             histories,
             firstPlayerIs: !firstPlayerIs,
             currentStep: currentStep + 1,
-            winner: winnerCheck(square)
+            winner: checkWinner(square)
 
         }
         break;
@@ -53,7 +48,7 @@ export default function reducer(state = initialState, action) {
     }
   };
 
-  function winnerCheck(squares) {
+  function checkWinner(squares) {
       const possibility = [
         [0, 1, 2],
         [3, 4, 5],
@@ -75,7 +70,7 @@ export default function reducer(state = initialState, action) {
       }
       return null;
     }
-    function playerDetect(firstPlayerIs) {
+    function detectPlayer(firstPlayerIs) {
 
         if(firstPlayerIs) {
           return Player.FIRST_PLAYER;
