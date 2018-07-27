@@ -3,6 +3,8 @@ import '../index.css';
 import Square from "./square";
 
 
+
+
 class Board extends React.Component {
 
   renderSquare(i) {
@@ -14,25 +16,24 @@ class Board extends React.Component {
     )
   }
 
+  createBoard() {
+  let rows = [];
+  for(var i = 0; i < 3; i++){
+      let squaresArray = []; //for every row
+      for(var j = 0; j < 3; j++){
+        squaresArray.push(this.renderSquare(3*i+j)); // [[0,1,2], [3,4,5], [6,7,8]]
+      }
+      rows.push(<div className="board-row">{squaresArray}</div>); //push the rows (1,2,3)
+  }
+  return rows;
+}
+
+
   render() {
 
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {this.createBoard()}
       </div>
     );
   }

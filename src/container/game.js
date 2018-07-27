@@ -18,7 +18,7 @@ class Game extends React.Component {
       status = `Next Player: ${firstPlayerIs ? 'X' : 'O'}`;
     }
     const moves = histories.map((step, move) => {
-      const menu = move ? `Go to ${move} move` : 'start from the beginning';
+      const menu = move ? `Go to the ${move} move` : 'start from the beginning';
          return (
            <li key={move}>
              <button
@@ -62,4 +62,3 @@ const mapStateToProps = (state) => {
 
 
 export default connect(mapStateToProps, {moveStep, jumpTo})(Game);
-  
