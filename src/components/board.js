@@ -3,8 +3,6 @@ import '../index.css';
 import Square from "./square";
 
 
-
-
 class Board extends React.Component {
 
   renderSquare(i) {
