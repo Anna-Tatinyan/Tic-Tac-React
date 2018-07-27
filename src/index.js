@@ -63,7 +63,7 @@ class Game extends React.Component {
     }
   }
 
-  playerDetect() {
+  detectPlayer() {
 
           if(this.state.FisrPlayerIs) {
             return Player.FIRST_PLAYER;
@@ -84,7 +84,7 @@ class Game extends React.Component {
       if(squareCopy[i] !== null || winner) {
         return;
       }
-      squareCopy[i] = this.playerDetect();
+      squareCopy[i] = this.detectPlayer();
 
       histories.push(squareCopy)
       this.setState({
@@ -92,13 +92,13 @@ class Game extends React.Component {
           FisrPlayerIs: !FisrPlayerIs,
           currentStep: currentStep + 1
       })
-      this.winnerDetect(squareCopy);
+      this.detectWinner(squareCopy);
   }
 
-  winnerDetect(squares) {
+  detectWinner(squares) {
     const {winner} = this.state;
 
-    const currentWinner = winnerCheck(squares)
+    const currentWinner = checkWinner(squares)
 
     if(currentWinner) {
       this.setState({
@@ -115,7 +115,7 @@ class Game extends React.Component {
     if (winner) {
      status = 'Winner: ' + winner;
     } else {
-     status = `Next Player: ${this.playerDetect()}`;
+     status = `Next Player: ${this.detectPlayer()}`;
     }
     const moves = histories.map((step, move) => {
      const menu = move ? `Go to ${move} move` : 'start from the beginning';
@@ -155,7 +155,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-function winnerCheck(squares) {
+function checkWinner(squares) {
   const possibility = [
     [0, 1, 2],
     [3, 4, 5],
