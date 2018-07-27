@@ -28,7 +28,6 @@ class Board extends React.Component {
   return rows;
 }
 
-
   render() {
 
     return (

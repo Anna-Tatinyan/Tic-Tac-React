@@ -8,7 +8,6 @@ class Square extends React.Component {
         <button className="square" onClick = {() =>
           this.props.clickHandler()}>
         {this.props.squareNumber}
-
         </button>
     );
   }

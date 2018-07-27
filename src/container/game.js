@@ -11,6 +11,7 @@ class Game extends React.Component {
 
     const {histories, winner, currentStep, firstPlayerIs} = this.props;
 
+
     let status;
     if (winner) {
       status = 'Winner: ' + winner;

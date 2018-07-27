@@ -4,7 +4,6 @@ class Player {
   static SECOND_PLAYER = "o"
 }
 
-
 const initialState = {
 
     histories: [Array(9).fill(null)],

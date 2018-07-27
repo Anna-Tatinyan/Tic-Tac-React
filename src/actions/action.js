@@ -4,7 +4,6 @@ export function moveStep(squareNumber) {
     squareNumber
   }
 }
-
 export function jumpTo(move) {
   return {
     type: "Jump",

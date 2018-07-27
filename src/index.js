@@ -5,7 +5,6 @@ import {Provider} from "react-redux";
 import store from "./store"
 
 import Game from './container/game.js'
-// ========================================
 
 ReactDOM.render(
   <Provider store={store}>
