@@ -1,0 +1,6 @@
+use winners;
+CREATE TABLE IF NOT EXISTS winnersTable(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	currentTime DATETIME NOT NULL,
+  winnerCharacter VARCHAR(30) NOT NULL
+);
